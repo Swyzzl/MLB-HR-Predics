@@ -223,7 +223,8 @@ with chart_col:
             if i < len(top5):
                 ax.hlines(y - 0.028, 0.05, 0.95, color="gray", linewidth=0.4)
         
-            y -= 0.075
+                y -= 0.075
+                
         st.pyplot(fig)
         
 with summary_col:
