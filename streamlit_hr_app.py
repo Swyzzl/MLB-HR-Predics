@@ -202,15 +202,19 @@ if len(filtered) > 0 and "batter" in filtered.columns:
 
     player_row = filtered.loc[filtered["batter"] == selected_batter].iloc[0]
 
-     st.metric("HR Probability", f"{player_row.get('hr_probability_3ab', 0):.0%}")
+    # Main metric
+    st.metric("HR Probability", f"{player_row.get('hr_probability_3ab', 0):.0%}")
 
-    st.write({
+    # Details dictionary
+    details = {
         "Team": player_row.get("team", ""),
         "Opponent": player_row.get("opponent", ""),
         "Pitcher": player_row.get("pitcher", ""),
         "Batter Hand": player_row.get("batter_hand", ""),
         "Pitcher Hand": player_row.get("pitcher_hand", ""),
-    })
-    st.json(details)
+    }
+
+    st.write(details)
+
 else:
     st.info("No players match the current filters.")
