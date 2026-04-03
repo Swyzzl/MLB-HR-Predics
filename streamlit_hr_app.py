@@ -16,15 +16,7 @@ DISPLAY_COLUMNS = [
     "pitcher",
     "batter_hand",
     "pitcher_hand",
-    "top_pitch_in_mix",
-    "dominant_pitch_usage",
-    "hr_probability_pa",
     "hr_probability_3ab",
-    "park_factor_hr",
-    "raw_matchup_score",
-    "weighted_outcome_component",
-    "weighted_bat_speed_component",
-    "weighted_ev_la_component",
 ]
 
 COLUMN_LABELS = {
@@ -37,7 +29,7 @@ COLUMN_LABELS = {
     "top_pitch_in_mix": "Top Pitch",
     "dominant_pitch_usage": "Top Pitch Usage",
     "hr_probability_pa": "HR Prob / PA",
-    "hr_probability_3ab": "HR Prob / 3 AB",
+    "hr_probability_3ab": "HR Probability",
     "park_factor_hr": "Park Factor",
     "raw_matchup_score": "Matchup Score",
     "weighted_outcome_component": "Outcome Component",
@@ -46,8 +38,6 @@ COLUMN_LABELS = {
 }
 
 PERCENT_COLUMNS = [
-    "dominant_pitch_usage",
-    "hr_probability_pa",
     "hr_probability_3ab",
 ]
 
@@ -89,7 +79,7 @@ def format_dataframe(df: pd.DataFrame):
     for col in df.columns:
         original_name = next((k for k, v in COLUMN_LABELS.items() if v == col), None)
         if original_name in PERCENT_COLUMNS:
-            format_dict[col] = "{:.1%}"
+            format_dict[col] = "{:.0%}"
         elif original_name in DECIMAL_COLUMNS:
             format_dict[col] = "{:.3f}"
 
@@ -113,9 +103,6 @@ with right:
         "Sort by",
         options=[
             "hr_probability_3ab",
-            "hr_probability_pa",
-            "raw_matchup_score",
-            "park_factor_hr",
         ],
         index=0,
         format_func=lambda x: COLUMN_LABELS.get(x, x),
@@ -215,29 +202,15 @@ if len(filtered) > 0 and "batter" in filtered.columns:
 
     player_row = filtered.loc[filtered["batter"] == selected_batter].iloc[0]
 
-    c1, c2, c3 = st.columns(3)
-    with c1:
-        st.metric("HR Prob / PA", f"{player_row.get('hr_probability_pa', 0):.1%}")
-        st.metric("Matchup Score", f"{player_row.get('raw_matchup_score', 0):.3f}")
-    with c2:
-        st.metric("HR Prob / 3 AB", f"{player_row.get('hr_probability_3ab', 0):.1%}")
-        st.metric("Park Factor", f"{player_row.get('park_factor_hr', 0):.3f}")
-    with c3:
-        st.metric("Top Pitch Usage", f"{player_row.get('dominant_pitch_usage', 0):.1%}")
-        st.metric("Top Pitch", f"{player_row.get('top_pitch_in_mix', 'N/A')}")
+     st.metric("HR Probability", f"{player_row.get('hr_probability_3ab', 0):.0%}")
 
-    details = {
+    st.write({
         "Team": player_row.get("team", ""),
         "Opponent": player_row.get("opponent", ""),
-        "Opposing Pitcher": player_row.get("pitcher", ""),
+        "Pitcher": player_row.get("pitcher", ""),
         "Batter Hand": player_row.get("batter_hand", ""),
         "Pitcher Hand": player_row.get("pitcher_hand", ""),
-        "Outcome Component": player_row.get("weighted_outcome_component", ""),
-        "Bat Speed Component": player_row.get("weighted_bat_speed_component", ""),
-        "EV/LA Component": player_row.get("weighted_ev_la_component", ""),
-        "Pitch Types Used": player_row.get("pitch_types_used", ""),
-    }
-
+    })
     st.json(details)
 else:
     st.info("No players match the current filters.")
