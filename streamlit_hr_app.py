@@ -208,7 +208,7 @@ with chart_col:
             ax.text(
                 0.95, y,
                 prob,
-                fontsize=16 if i == 1 else 14
+                fontsize=16 if i == 1 else 14,
                 fontweight="bold" if i == 1 else "normal",
                 color="#4FC3F7",  # light blue accent
                 ha="right"
