@@ -200,7 +200,7 @@ with chart_col:
 
             ax.text(
                 0.05, y,
-                f"{i}. {name}",
+                f"{name}",
                 fontsize=14,
                 color="white"
             )
@@ -208,7 +208,8 @@ with chart_col:
             ax.text(
                 0.95, y,
                 prob,
-                fontsize=14,
+                fontsize=16 if i == 1 else 14
+                fontweight="bold" if i == 1 else "normal",
                 color="#4FC3F7",  # light blue accent
                 ha="right"
             )
