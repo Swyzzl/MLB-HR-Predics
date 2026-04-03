@@ -198,11 +198,11 @@ with chart_col:
             color="gray"
         )
         # Loop through players
-        y = 0.78
+       y = 0.80
         for i, row in enumerate(top5.itertuples(), start=1):
             name = row.batter
             prob = f"{row.hr_probability_3ab:.0%}"
-
+        
             ax.text(
                 0.05, y,
                 f"{i}. {name}",
@@ -210,7 +210,7 @@ with chart_col:
                 color="white",
                 va="center"
             )
-
+        
             ax.text(
                 0.95, y,
                 prob,
@@ -219,12 +219,11 @@ with chart_col:
                 ha="right",
                 va="center"
             )
-
+        
             if i < len(top5):
-                ax.hlines(y - 0.045, 0.05, 0.95, color="gray", linewidth=0.25)
-
-            y -= 0.045
-
+                ax.hlines(y - 0.028, 0.05, 0.95, color="gray", linewidth=0.4)
+        
+            y -= 0.075
         st.pyplot(fig)
         
 with summary_col:
