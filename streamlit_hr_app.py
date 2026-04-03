@@ -8,7 +8,7 @@ st.set_page_config(
     layout="wide"
 )
 
-CSV_PATH = "hr_predictions.csv"
+CSV_PATH = "C:\Users\adria\hr_predictions.csv"
 
 DISPLAY_COLUMNS = [
     "batter",
