@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+import matplotlib.pyplot as plt
 
 st.set_page_config(
     page_title="MLB HR Projections",
@@ -119,7 +120,7 @@ selected_opponents = st.sidebar.multiselect("Opponent", opponents, default=oppon
 selected_pitchers = st.sidebar.multiselect("Opposing pitcher", pitchers, default=[])
 
 min_hr_3ab = st.sidebar.slider(
-    "Minimum HR Prob / 3 AB",
+    "Minimum HR Probability",
     min_value=0.0,
     max_value=float(df["hr_probability_3ab"].max()) if "hr_probability_3ab" in df.columns else 1.0,
     value=0.0,
@@ -153,38 +154,48 @@ if sort_choice in filtered.columns:
 top_n = min(10, len(filtered))
 top_df = filtered.head(top_n)
 
-metric_cols = st.columns(4)
-with metric_cols[0]:
-    st.metric("Players shown", f"{len(filtered)}")
-with metric_cols[1]:
-    if "hr_probability_3ab" in filtered.columns and len(filtered) > 0:
-        st.metric("Best HR Prob / 3 AB", f"{filtered['hr_probability_3ab'].max():.1%}")
-with metric_cols[2]:
-    if "hr_probability_pa" in filtered.columns and len(filtered) > 0:
-        st.metric("Best HR Prob / PA", f"{filtered['hr_probability_pa'].max():.1%}")
-with metric_cols[3]:
-    if "park_factor_hr" in filtered.columns and len(filtered) > 0:
-        st.metric("Top Park Factor", f"{filtered['park_factor_hr'].max():.3f}")
+if len(filtered) > 0 and "hr_probability_3ab" in filtered.columns and "batter" in filtered.columns:
+    top_row = filtered.sort_values("hr_probability_3ab", ascending=False).iloc[0]
+
+    metric_cols = st.columns(3)
+
+    with metric_cols[0]:
+        st.metric("Players Shown", f"{len(filtered)}")
+
+    with metric_cols[1]:
+        st.metric("Highest HR Probability", f"{top_row['batter']}")
+
+    with metric_cols[2]:
+        st.metric("HR Probability", f"{top_row['hr_probability_3ab']:.0%}")
+else:
+    st.metric("Players Shown", "0")
 
 chart_col, summary_col = st.columns([2, 1])
 
 with chart_col:
     if len(top_df) > 0 and "batter" in top_df.columns and "hr_probability_3ab" in top_df.columns:
-        chart_data = top_df.set_index("batter")["hr_probability_3ab"]
-        st.bar_chart(chart_data)
+        chart_df = top_df[["batter", "hr_probability_3ab"]].copy()
+        chart_df = chart_df.sort_values("hr_probability_3ab", ascending=True)
 
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.barh(chart_df["batter"], chart_df["hr_probability_3ab"])
+        ax.set_xlabel("HR Probability")
+        ax.set_ylabel("Player")
+        ax.set_title("Top HR Probabilities")
+
+        st.pyplot(fig)
+        
 with summary_col:
     st.markdown("### Quick notes")
     st.write(
-        "- Default ranking uses **HR Prob / 3 AB** because it is the most intuitive daily projection."
+        "- **HR Probability** represents each player's estimated chance to hit a home run in a typical 3 at-bat game sample."
     )
     st.write(
-        "- **HR Prob / PA** is useful for comparing pure plate-appearance power likelihood."
+        "- The model combines **real game results**, **advanced hitting metrics**, and **matchup context** to create each projection."
     )
     st.write(
-        "- **Park Factor** and pitch-mix fields help explain why certain hitters rise or fall."
+        "- Projections also account for **park and weather factors**, which can raise or lower home run likelihood depending on the game environment."
     )
-
 st.markdown("### Projection table")
 display_df = build_display_df(filtered)
 
