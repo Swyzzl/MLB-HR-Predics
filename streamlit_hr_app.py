@@ -173,15 +173,47 @@ else:
 chart_col, summary_col = st.columns([2, 1])
 
 with chart_col:
-    if len(top_df) > 0 and "batter" in top_df.columns and "hr_probability_3ab" in top_df.columns:
-        chart_df = top_df[["batter", "hr_probability_3ab"]].copy()
-        chart_df = chart_df.sort_values("hr_probability_3ab", ascending=True)
+    if len(filtered) > 0 and "batter" in filtered.columns and "hr_probability_3ab" in filtered.columns:
 
-        fig, ax = plt.subplots(figsize=(10, 6))
-        ax.barh(chart_df["batter"], chart_df["hr_probability_3ab"])
-        ax.set_xlabel("HR Probability")
-        ax.set_ylabel("Player")
-        ax.set_title("Top HR Probabilities")
+        top5 = filtered.sort_values("hr_probability_3ab", ascending=False).head(5)
+
+        fig, ax = plt.subplots(figsize=(8, 5))
+        ax.set_facecolor("#0E1117")  # dark background
+        fig.patch.set_facecolor("#0E1117")
+
+        ax.axis("off")
+
+        # Title
+        ax.text(
+            0.05, 0.9,
+            "TOP HR PROJECTIONS",
+            fontsize=18,
+            fontweight="bold",
+            color="white"
+        )
+
+        # Loop through players
+        y = 0.75
+        for i, row in enumerate(top5.itertuples(), start=1):
+            name = row.batter
+            prob = f"{row.hr_probability_3ab:.0%}"
+
+            ax.text(
+                0.05, y,
+                f"{i}. {name}",
+                fontsize=14,
+                color="white"
+            )
+
+            ax.text(
+                0.95, y,
+                prob,
+                fontsize=14,
+                color="#4FC3F7",  # light blue accent
+                ha="right"
+            )
+
+            y -= 0.12
 
         st.pyplot(fig)
         
