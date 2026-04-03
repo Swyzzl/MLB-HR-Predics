@@ -177,7 +177,7 @@ with chart_col:
 
         top5 = filtered.sort_values("hr_probability_3ab", ascending=False).head(5)
 
-        fig, ax = plt.subplots(figsize=(8, 5))
+        fig, ax = plt.subplots(figsize=(8, 3.8))
         ax.set_facecolor("#0E1117")  # dark background
         fig.patch.set_facecolor("#0E1117")
 
@@ -198,7 +198,7 @@ with chart_col:
             color="gray"
         )
         # Loop through players
-       y = 0.80
+        y = 0.80
         for i, row in enumerate(top5.itertuples(), start=1):
             name = row.batter
             prob = f"{row.hr_probability_3ab:.0%}"
