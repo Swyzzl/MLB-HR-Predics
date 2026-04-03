@@ -191,7 +191,12 @@ with chart_col:
             fontweight="bold",
             color="white"
         )
-
+        ax.text(
+            0.05, 0.85,
+            "Top 5 hitters by HR probability",
+            fontsize=10,
+            color="gray"
+        )
         # Loop through players
         y = 0.75
         for i, row in enumerate(top5.itertuples(), start=1):
@@ -204,7 +209,7 @@ with chart_col:
                 fontsize=14,
                 color="white"
             )
-
+            ax.hlines(y + 0.03, 0.05, 0.95, color="gray", linewidth=0.5)
             ax.text(
                 0.95, y,
                 prob,
