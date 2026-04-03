@@ -221,9 +221,9 @@ with chart_col:
             )
 
             if i < len(top5):
-                ax.hlines(y - 0.045, 0.05, 0.95, color="gray", linewidth=0.4)
+                ax.hlines(y - 0.045, 0.05, 0.95, color="gray", linewidth=0.25)
 
-            y -= 0.095
+            y -= 0.045
 
         st.pyplot(fig)
         
