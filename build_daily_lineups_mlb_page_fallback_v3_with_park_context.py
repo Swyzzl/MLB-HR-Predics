@@ -266,7 +266,7 @@ def load_projected_lineups(path: str) -> pd.DataFrame:
     df = df.copy()
     df["game_date"] = df["game_date"].astype(str)
     df["team"] = df["team"].astype(str).map(normalize_team_abbr)
-        df["opponent"] = df["opponent"].astype(str).map(normalize_team_abbr)
+    df["opponent"] = df["opponent"].astype(str).map(normalize_team_abbr)
     df["batter_hand"] = df["batter_hand"].astype(str).str.upper()
     df["pitcher_hand"] = df["pitcher_hand"].astype(str).str.upper()
     return df
