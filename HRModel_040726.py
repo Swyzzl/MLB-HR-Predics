@@ -57,9 +57,9 @@ SEASON_WEIGHTS = {2025: 0.80, 2026: 0.20}
 CACHE_DIR = "statcast_cache"
 
 # Core matchup weights
-WEIGHT_HR_BBE = 0.55
+WEIGHT_HR_BBE = 0.40
 WEIGHT_BAT_SPEED = 0.20
-WEIGHT_EV_LA = 0.25
+WEIGHT_EV_LA = 0.40
 
 # Smoothing priors
 BATTER_PRIOR_RATE = 0.045
@@ -94,8 +94,8 @@ MAX_PULL_AIR_ADJ = 0.10
 MIN_USAGE_TO_KEEP = 0.12
 
 # Park factors
-DEFAULT_PARK_FACTORS_FILE = "Todays_MLB_Park_Factors_ParkOnly.xlsx"
-PARK_FACTORS_SHEET_NAME = "Park_HR_Factors"
+DEFAULT_PARK_FACTORS_FILE = "Todays MLB Park Factors  Ballpark Pal.xlsx"
+PARK_FACTORS_SHEET_NAME = "Sheet1"
 USE_PARK_FACTORS = True
 PARK_FACTOR_FALLBACK = 1.00
 
